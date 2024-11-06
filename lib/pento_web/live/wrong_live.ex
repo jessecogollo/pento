@@ -1,17 +1,21 @@
 defmodule PentoWeb.WrongLive do
   use PentoWeb, :live_view
+  # alias Pento.Accounts
 
   def generate_winner_number() do
     :rand.uniform(10)
   end
 
-  def mount(_params, _session, socket) do
+  def mount(_params, session, socket) do
+    # user = Accounts.get_user_by_session_token(session["user_token"])
     # generate a ramdon number between 1 to 10
     winner_number = generate_winner_number()
 		{:ok, assign(
       socket,
       score: 0,
       message: "Make a guess:",
+      session_id: session["live_socket_id"],
+      # current_user: user,
       winner_number: winner_number,
       user_win: false
     )}
@@ -48,6 +52,11 @@ defmodule PentoWeb.WrongLive do
         </.link>
       <% end %>
     </h2>
+    <br/>
+    <pre>
+      <%= @current_user.email %>
+      <%= @session_id %>
+    </pre>
     """
   end
 
